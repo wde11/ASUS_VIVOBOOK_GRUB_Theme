@@ -1,189 +1,138 @@
 #!/bin/bash
 
-# ==============================================================================
 #
-#          GRUB Theme Installer - A script to safely install GRUB themes
+# ASUS Vivobook GRUB Theme Installer
 #
-#   Author: https://github.com/wde11
-#   Version: 1.1
-#   Description: This script automates the installation of a GRUB theme.
-#                It performs the following steps:
-#                1. Checks for root privileges.
-#                2. Identifies the correct GRUB directory.
-#                3. Backs up the existing GRUB configuration.
-#                4. Copies the theme files to the GRUB themes directory.
-#                5. Sets the new theme in the GRUB configuration file.
-#                6. Updates the GRUB bootloader.
-#                7. Includes an uninstall option to revert changes.
+# This script automates the installation of the ASUS Vivobook GRUB theme.
+# It checks for root privileges, copies the theme files to the correct
+# directory, sets the theme in the GRUB configuration, and updates GRUB.
 #
-#   Usage: ./install.sh [theme_folder]
-#          ./install.sh --uninstall
+# Created by: Gemini
+# Based on the theme by: wde11 (https://github.com/wde11/ASUS_VIVOBOOK_GRUB_Theme)
 #
-# ==============================================================================
 
-# --- Configuration & Constants ---
-
-# Exit immediately if a command exits with a non-zero status.
-set -e
-
-# Color codes for better output
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
+# --- Configuration ---
+THEME_NAME="ASUS_VIVOBOOK_GRUB_Theme"
+GRUB_THEMES_DIR="/boot/grub/themes"
+GRUB_CONFIG_FILE="/etc/default/grub"
+GRUB_CONFIG_BACKUP="/etc/default/grub.bak"
+THEME_DIR_URL="https://github.com/wde11/ASUS_VIVOBOOK_GRUB_Theme.git"
 
 # --- Helper Functions ---
 
-# Function to print a formatted info message
-info() {
-    echo -e "${GREEN}[INFO]${NC} $1"
+# Print a message in a specific color
+# $1: color (e.g., "red", "green", "yellow")
+# $2: message
+function print_color() {
+    case $1 in
+        "green") echo -e "\e[32m$2\e[0m" ;;
+        "red") echo -e "\e[31m$2\e[0m" ;;
+        "yellow") echo -e "\e[33m$2\e[0m" ;;
+        *) echo "$2" ;;
+    esac
 }
 
-# Function to print a formatted warning message
-warn() {
-    echo -e "${YELLOW}[WARN]${NC} $1"
-}
-
-# Function to print a formatted error message and exit
-error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-    exit 1
-}
-
-# --- Pre-flight Checks ---
+# --- Main Script ---
 
 # 1. Check for Root Privileges
+print_color "yellow" "Checking for root privileges..."
 if [[ $EUID -ne 0 ]]; then
-   error "This script must be run as root. Please use 'sudo ./install.sh'"
+   print_color "red" "This script must be run as root. Please use sudo."
+   exit 1
 fi
+print_color "green" "Root privileges confirmed."
+echo
 
-# 2. Check for correct arguments
-if [ "$#" -eq 0 ] || [ "$#" -gt 1 ]; then
-    echo "Usage: $0 [path_to_theme_folder]"
-    echo "   or: $0 --uninstall"
+# 2. Check for git
+print_color "yellow" "Checking if git is installed..."
+if ! command -v git &> /dev/null; then
+    print_color "red" "Git is not installed. Please install it to continue."
+    print_color "red" "For Debian/Ubuntu: sudo apt-get install git"
+    print_color "red" "For Fedora/CentOS: sudo dnf install git"
+    print_color "red" "For Arch Linux: sudo pacman -S git"
+    exit 1
+fi
+print_color "green" "Git is installed."
+echo
+
+# 3. Clone the theme repository
+print_color "yellow" "Cloning the theme repository from GitHub..."
+if [ -d "$THEME_NAME" ]; then
+    print_color "yellow" "Theme directory already exists. Pulling latest changes..."
+    cd "$THEME_NAME" || exit
+    git pull
+    cd ..
+else
+    git clone "$THEME_DIR_URL"
+    if [ $? -ne 0 ]; then
+        print_color "red" "Failed to clone the repository. Please check the URL and your internet connection."
+        exit 1
+    fi
+fi
+print_color "green" "Theme repository cloned successfully."
+echo
+
+# 4. Create GRUB themes directory if it doesn't exist
+print_color "yellow" "Checking for GRUB themes directory..."
+if [ ! -d "$GRUB_THEMES_DIR" ]; then
+    print_color "yellow" "GRUB themes directory not found. Creating it at $GRUB_THEMES_DIR..."
+    mkdir -p "$GRUB_THEMES_DIR"
+    print_color "green" "Directory created."
+else
+    print_color "green" "GRUB themes directory already exists."
+fi
+echo
+
+# 5. Copy the theme to the GRUB themes directory
+print_color "yellow" "Installing the theme..."
+cp -r "$THEME_NAME/ASUS_VIVOBOOK" "$GRUB_THEMES_DIR/"
+if [ $? -eq 0 ]; then
+    print_color "green" "Theme successfully copied to $GRUB_THEMES_DIR."
+else
+    print_color "red" "Failed to copy the theme. Aborting."
+    exit 1
+fi
+echo
+
+# 6. Configure GRUB to use the theme
+print_color "yellow" "Configuring GRUB..."
+
+# Backup the current GRUB config
+if [ -f "$GRUB_CONFIG_FILE" ]; then
+    print_color "yellow" "Backing up current GRUB configuration to $GRUB_CONFIG_BACKUP..."
+    cp "$GRUB_CONFIG_FILE" "$GRUB_CONFIG_BACKUP"
+    print_color "green" "Backup successful."
+else
+    print_color "red" "GRUB configuration file not found at $GRUB_CONFIG_FILE. Aborting."
     exit 1
 fi
 
-# --- Main Logic ---
-
-# Find the correct GRUB directory and configuration file
-GRUB_CFG="/etc/default/grub"
-GRUB_DIR=""
-if [ -d "/boot/grub/themes" ]; then
-    GRUB_DIR="/boot/grub/themes"
-elif [ -d "/boot/grub2/themes" ]; then
-    GRUB_DIR="/boot/grub2/themes"
-else
-    # If themes directory doesn't exist, create it
-    info "GRUB themes directory not found. Attempting to create it."
-    if [ -d "/boot/grub" ]; then
-        mkdir -p "/boot/grub/themes"
-        GRUB_DIR="/boot/grub/themes"
-    elif [ -d "/boot/grub2" ]; then
-        mkdir -p "/boot/grub2/themes"
-        GRUB_DIR="/boot/grub2/themes"
-    else
-        error "Could not find a valid GRUB installation directory (/boot/grub or /boot/grub2)."
-    fi
-fi
-info "Found GRUB directory at: $GRUB_DIR"
-
-# --- Uninstall Logic ---
-if [ "$1" == "--uninstall" ]; then
-    info "Starting uninstallation process..."
-    GRUB_CFG_BACKUP="${GRUB_CFG}.bak.theme"
-    if [ -f "$GRUB_CFG_BACKUP" ]; then
-        info "Restoring GRUB configuration from backup..."
-        mv "$GRUB_CFG_BACKUP" "$GRUB_CFG"
-    else
-        warn "No backup file found. Removing theme line manually."
-        # Use sed to comment out the GRUB_THEME line
-        sed -i -E 's/^(GRUB_THEME=.*)/#\1/g' "$GRUB_CFG"
-    fi
-
-    info "Updating GRUB..."
-    # Universal command to update GRUB
-    if command -v update-grub &> /dev/null; then
-        update-grub
-    elif command -v grub-mkconfig &> /dev/null; then
-        grub-mkconfig -o /boot/grub/grub.cfg
-    elif command -v grub2-mkconfig &> /dev/null; then
-        grub2-mkconfig -o /boot/grub2/grub.cfg
-    else
-        error "Could not find 'update-grub' or 'grub-mkconfig'. Please update GRUB manually."
-    fi
-
-    info "${GREEN}Theme uninstalled successfully!${NC} The theme files are still in $GRUB_DIR if you wish to remove them manually."
-    exit 0
-fi
-
-
-# --- Installation Logic ---
-
-THEME_SOURCE_DIR=$1
-
-# 3. Check if the theme source directory and theme.txt exist
-if [ ! -d "$THEME_SOURCE_DIR" ]; then
-    error "Theme source directory not found: $THEME_SOURCE_DIR"
-fi
-
-if [ ! -f "$THEME_SOURCE_DIR/theme.txt" ]; then
-    warn "The theme directory '$THEME_SOURCE_DIR' does not contain a 'theme.txt' file."
-    warn "This might not be a valid GRUB theme. Continuing anyway..."
-fi
-
-THEME_NAME=$(basename "$THEME_SOURCE_DIR")
-THEME_DEST_DIR="$GRUB_DIR/$THEME_NAME"
-
-info "Starting GRUB theme installation for '$THEME_NAME'"
-
-# 4. Backup the GRUB config file
-GRUB_CFG_BACKUP="${GRUB_CFG}.bak.theme"
-if [ ! -f "$GRUB_CFG_BACKUP" ]; then
-    info "Backing up GRUB configuration to $GRUB_CFG_BACKUP..."
-    cp "$GRUB_CFG" "$GRUB_CFG_BACKUP"
-else
-    warn "Backup file already exists. Skipping backup."
-fi
-
-# 5. Copy the theme to the GRUB themes directory
-info "Copying theme files to $THEME_DEST_DIR..."
-# Use rsync for better copying, or cp as a fallback
-if command -v rsync &> /dev/null; then
-    rsync -a --delete "$THEME_SOURCE_DIR/" "$THEME_DEST_DIR/"
-else
-    cp -r "$THEME_SOURCE_DIR" "$GRUB_DIR"
-fi
-
-# 6. Set the theme in the GRUB configuration
-THEME_CONFIG_LINE="GRUB_THEME=\"$THEME_DEST_DIR/theme.txt\""
-info "Setting theme in $GRUB_CFG..."
+# Set the theme path in the GRUB config
+THEME_PATH_LINE="GRUB_THEME=\"$GRUB_THEMES_DIR/ASUS_VIVOBOOK/theme.txt\""
 
 # Check if GRUB_THEME is already set
-if grep -q "^GRUB_THEME=" "$GRUB_CFG"; then
-    # It's set, so we replace the line
-    info "GRUB_THEME variable found, updating it."
-    sed -i -E "s|^GRUB_THEME=.*|$THEME_CONFIG_LINE|" "$GRUB_CFG"
-elif grep -q "^#GRUB_THEME=" "$GRUB_CFG"; then
-    # It's commented out, so we uncomment and replace
-    info "GRUB_THEME variable found but commented, updating it."
-    sed -i -E "s|^#GRUB_THEME=.*|$THEME_CONFIG_LINE|" "$GRUB_CFG"
+if grep -q "^GRUB_THEME=" "$GRUB_CONFIG_FILE"; then
+    print_color "yellow" "Updating existing GRUB_THEME setting..."
+    sed -i "s|^GRUB_THEME=.*|$THEME_PATH_LINE|" "$GRUB_CONFIG_FILE"
 else
-    # It's not in the file, so we add it
-    info "GRUB_THEME variable not found, adding it."
-    echo "" >> "$GRUB_CFG"
-    echo "# Added by install.sh" >> "$GRUB_CFG"
-    echo "$THEME_CONFIG_LINE" >> "$GRUB_CFG"
+    print_color "yellow" "Adding GRUB_THEME setting..."
+    echo -e "\n# Set theme for GRUB" >> "$GRUB_CONFIG_FILE"
+    echo "$THEME_PATH_LINE" >> "$GRUB_CONFIG_FILE"
 fi
 
-# Ensure GRUB_GFXMODE is set for proper display
-if ! grep -q "^GRUB_GFXMODE=" "$GRUB_CFG"; then
-    info "Setting GRUB_GFXMODE for best results."
-    echo "GRUB_GFXMODE=auto" >> "$GRUB_CFG"
+# Ensure GRUB_GFXMODE is set for better resolution
+if ! grep -q "^GRUB_GFXMODE=" "$GRUB_CONFIG_FILE"; then
+    print_color "yellow" "Adding GRUB_GFXMODE setting for better resolution..."
+    echo "GRUB_GFXMODE=1920x1080x32,auto" >> "$GRUB_CONFIG_FILE"
+else
+    print_color "green" "GRUB_GFXMODE is already set."
 fi
+
+print_color "green" "GRUB configuration updated."
+echo
 
 # 7. Update GRUB
-info "Applying changes by updating GRUB..."
+print_color "yellow" "Updating GRUB to apply changes..."
 if command -v update-grub &> /dev/null; then
     update-grub
 elif command -v grub-mkconfig &> /dev/null; then
@@ -191,10 +140,24 @@ elif command -v grub-mkconfig &> /dev/null; then
 elif command -v grub2-mkconfig &> /dev/null; then
     grub2-mkconfig -o /boot/grub2/grub.cfg
 else
-    error "Could not find 'update-grub' or 'grub-mkconfig'. Please update GRUB manually."
+    print_color "red" "Could not find a command to update GRUB."
+    print_color "red" "Please update GRUB manually."
+    print_color "red" "Common commands:"
+    print_color "red" "  - sudo update-grub (Debian/Ubuntu)"
+    print_color "red" "  - sudo grub-mkconfig -o /boot/grub/grub.cfg (Arch Linux)"
+    print_color "red" "  - sudo grub2-mkconfig -o /boot/grub2/grub.cfg (Fedora/CentOS)"
+    exit 1
 fi
 
-info "${GREEN}Success!${NC} The '$THEME_NAME' GRUB theme has been installed."
-info "Reboot your system to see the changes."
+if [ $? -eq 0 ]; then
+    print_color "green" "GRUB update successful!"
+else
+    print_color "red" "GRUB update failed. Please check for errors above."
+    exit 1
+fi
+echo
 
-exit 0
+# --- Final Message ---
+print_color "green" "Installation complete! The ASUS Vivobook GRUB theme should now be active."
+print_color "yellow" "Reboot your system to see the changes."
+
