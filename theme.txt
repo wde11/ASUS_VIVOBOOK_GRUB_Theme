@@ -1,13 +1,12 @@
 # GRUB2 gfxmenu Linux theme
 # Responsive Version for All Displays
 
-# Global Property
+# --- Global Properties ---
 title-text: ""
 title-font: "Asus Rog 20.pf2"
 message-font: "Asus Rog 12.pf2"
 message-color: "#7F8183"
-# message-bg-color property removed for compatibility
-desktop-image: "asus_grub_bg.png"
+desktop-image: "background.png"
 desktop-color: "#000000"
 terminal-font: "Asus Rog 12.pf2"
 terminal-box: "terminal_box_*.png"
@@ -17,23 +16,26 @@ terminal-width: "100%"
 terminal-height: "100%"
 terminal-border: "0"
 
-# Boot Menu
-item_font: "Asus Rog 16.pf2"
-item_color: "#FFFFFF"
-item_spacing: 20
-item_height: 22
-item_padding: 0
-item_icon_space: 35
-selected_item_font: "Asus Rog 16.pf2"
-selected_item_color: "#000000"
-selected_item_pixmap_style: "select_*.png"
+# --- Component Definitions ---
 
 # Centered boot menu component
 + boot_menu {
+    # Layout Properties
     left = 34%      # Centered: (100% - 32% width) / 2
     top = 35%       # Centered: (100% - 30% height) / 2
     width = 32%
     height = 30%
+
+    # Item Properties (MOVED INSIDE)
+    item_font = "Asus Rog 16.pf2"
+    item_color = "#FFFFFF"
+    item_spacing = 20
+    item_height = 22
+    item_padding = 0
+    item_icon_space = 35
+    selected_item_font = "Asus Rog 16.pf2"
+    selected_item_color = "#000000"
+    selected_item_pixmap_style = "select_*.png"
 }
 
 # Label near the bottom of the screen
