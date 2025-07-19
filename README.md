@@ -6,20 +6,35 @@ Hello this is a guide in installing Grub Theme onto your Grub bootloader.
 
 Make sure you have git installed onto your device.
 
-### Prerequsiites 
+### Prerequisites
 
-* install git
-```sh sudo apt-get install git-all ```
+* Install Git:
+    ```sh
+    sudo apt-get install git-all
+    ```
+    
+### Installation
 
+1.  Clone this repository to your local machine:
+    ```sh
+    git clone [https://github.com/wde11/ASUS_VIVOBOOK_GRUB_Theme.git](https://github.com/wde11/ASUS_VIVOBOOK_GRUB_Theme.git)
+    ```
 
+2.  Navigate into the cloned directory:
+    ```sh
+    cd ASUS_VIVOBOOK_GRUB_Theme
+    ```
 
-1. ```sh 
-git clone https://github.com/wde11 ASUS_VIVOBOOK_GRUB_Theme.git ```
-2. ```sh 
-chmod +x install.sh ```
-3. ```
-sh sudo ./install.sh ```
-4. ```
-sh You've successfully installed your Grub theme onto your bootloader! ```
+3.  Make the installation script executable:
+    ```sh
+    chmod +x install.sh
+    ```
+
+4.  Run the installation script with `sudo`:
+    ```sh
+    sudo ./install.sh
+    ```
+
+You've successfully installed your Grub theme onto your bootloader! Reboot your system to see the changes.
 
 If you want to configure the file, open your terminal ``` sudo nano /etc/default/grub ``` and locate ``` #GRUB_THEME="/boot/grub/themes/theme_name/theme.txt" ```
