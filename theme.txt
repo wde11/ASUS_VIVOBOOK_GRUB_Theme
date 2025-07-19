@@ -1,10 +1,15 @@
-# GRUB Theme Configuration
+# GRUB2 gfxmenu Linux theme
+# Designed for 1920x1080 displays
 
-# Global settings
+# Global Property
 title-text: ""
-desktop-image: "asus_grub_bg.png"
+title-font: "Asus Rog 20.pf2"
+message-font: "Asus Rog 12.pf2"
+message-color: "#7F8183"
+message-bg-color: ""
+desktop-image: "background.png"
 desktop-color: "#000000"
-terminal-font: "Terminus Regular 14"
+terminal-font: "Asus Rog 12.pf2"
 terminal-box: "terminal_box_*.png"
 terminal-left: "0"
 terminal-top: "0"
@@ -12,40 +17,44 @@ terminal-width: "100%"
 terminal-height: "100%"
 terminal-border: "0"
 
-# Show the boot menu
+# Boot Menu
+item_font: "Asus Rog 16.pf2"
+item_color: "#FFFFFF"
+item_spacing: 20
+item_height: 22
+item_padding: 0
+item_icon_space: 35
+selected_item_font: "Asus Rog 16.pf2"
+selected_item_color: "#000000"
+selected_item_pixmap_style: "select_*.png"
+
 + boot_menu {
-  left = 30%
-  top = 30%
-  width = 40%
-  height = 40%
-  item_font = "unicode"
-  item_color = "#cccccc"
-  selected_item_color = "#ffffff"
-  icon_width = 32
-  icon_height = 32
-  item_icon_space = 20
-  item_height = 36
-  item_padding = 5
-  item_spacing = 10
-  selected_item_pixmap_style = "select_*.png"
+    left = 34%
+    top = 34%
+    width = 32%
+    height = 250
 }
 
-+ image {
-  top = 100%-50
-  left = 50%-240
-  width = 480
-  height = 42
-  file = "info.png"
-}
-
-# Show a countdown message using the label component
 + label {
-  top = 82%
-  left = 32%
-  width = 36%
-  align = "center"
-  id = "__timeout__"
-  text = "Booting in %d seconds"
-  color = "#cccccc"
-  font = "Unifont Regular 16"
+    top = 90%
+    left = 34%
+    width = 32%
+    height = 20
+    align = "center"
+    color = "#FFFFFF"
+    font = "Asus Rog 12.pf2"
+    text = "github.com/wde11"
+}
+
++ progress_bar {
+    id = "__timeout__"
+    left = 34%
+    top = 65%
+    width = 32%
+    height = 20
+    show_text = true
+    font = "Asus Rog 12.pf2"
+    text_color = "#FFFFFF"
+    bar_style = "progress_bar_*.png"
+    highlight_style = "progress_highlight_*.png"
 }
