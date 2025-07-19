@@ -4,15 +4,13 @@ Hello this is a guide in installing Grub Theme onto your Grub bootloader.
 
 (Be warned this repository is still work in progress, and so far there's nothing inside the theme.txt file)
 
-Make sure you have git installed onto your device.
-
 ### Prerequisites
 
 * Install Git:
     ```sh
     sudo apt-get install git-all
     ```
-    
+
 ### Installation
 
 1.  Clone this repository to your local machine:
@@ -37,4 +35,4 @@ Make sure you have git installed onto your device.
 
 You've successfully installed your Grub theme onto your bootloader! Reboot your system to see the changes.
 
-If you want to configure the file, open your terminal ``` sudo nano /etc/default/grub ``` and locate ``` #GRUB_THEME="/boot/grub/themes/theme_name/theme.txt" ```
+If you want to configure the file, open your terminal ```sh sudo nano /etc/default/grub ``` and locate ``` #GRUB_THEME="/boot/grub/themes/theme_name/theme.txt" ```
