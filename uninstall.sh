@@ -6,30 +6,23 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-# --- Configuration ---
-# The name of the theme folder to uninstall.
+# Configuration
 THEME_NAME="ASUS_VIVOBOOK_GRUB_Theme"
-# ---------------------
-
 THEME_DIR="/boot/grub/themes/$THEME_NAME"
-THEME_CONFIG_LINE="GRUB_THEME=\"$THEME_DIR/theme.txt\""
+GRUB_CONFIG_FILE="/etc/default/grub"
 
-# Disable theme in /etc/default/grub
-echo "Disabling GRUB theme in /etc/default/grub..."
-# Find the exact line and comment it out. The '|' is used as a separator for sed.
-if grep -q "^$THEME_CONFIG_LINE" /etc/default/grub; then
-    sed -i "s|^$THEME_CONFIG_LINE|#$THEME_CONFIG_LINE|" /etc/default/grub
-    echo "Theme configuration commented out."
-else
-    echo "Theme configuration not found in /etc/default/grub. Skipping."
-fi
+echo "Uninstalling theme '$THEME_NAME'..."
+
+# Comment out theme settings in /etc/default/grub
+sed -i 's|^\(GRUB_THEME="'"$THEME_DIR"'/theme.txt"\)|#\1|' "$GRUB_CONFIG_FILE"
+sed -i 's|^\(GRUB_GFXMODE=1920x1080,auto\)|#\1|' "$GRUB_CONFIG_FILE"
+sed -i 's|^\(GRUB_GFXPAYLOAD_LINUX=keep\)|#\1|' "$GRUB_CONFIG_FILE"
+echo "Theme configuration commented out in $GRUB_CONFIG_FILE."
 
 # Remove theme directory
 if [ -d "$THEME_DIR" ]; then
     echo "Removing theme directory: $THEME_DIR..."
     rm -rf "$THEME_DIR"
-else
-    echo "Theme directory not found. Skipping."
 fi
 
 # Update GRUB configuration
@@ -44,4 +37,3 @@ else
 fi
 
 echo "GRUB theme '$THEME_NAME' uninstalled successfully. 🗑️"
-echo "Your system will use the default GRUB look on next reboot."
