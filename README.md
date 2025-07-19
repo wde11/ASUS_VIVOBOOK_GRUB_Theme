@@ -15,7 +15,7 @@ Hello this is a guide in installing Grub Theme onto your Grub bootloader.
 
 1.  Clone this repository to your local machine:
     ```sh
-    git clone https://github.com/wde11/ASUS_VIVOBOOK_GRUB_Theme.
+    git clone https://github.com/wde11/ASUS_VIVOBOOK_GRUB_Theme.git
     ```
 
 2.  Navigate into the cloned directory:
