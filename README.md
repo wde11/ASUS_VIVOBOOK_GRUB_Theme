@@ -1,4 +1,4 @@
-# ASUS_VIVOBOOK_GRUB_Theme Installation Guide
+# Installation Guide
 
 Hello this is a guide in installing Grub Theme onto your Grub bootloader.
 
@@ -36,3 +36,6 @@ Hello this is a guide in installing Grub Theme onto your Grub bootloader.
 You've successfully installed your Grub theme onto your bootloader! Reboot your system to see the changes.
 
 If you want to configure the file, open your terminal ```sh sudo nano /etc/default/grub ``` and locate ``` #GRUB_THEME="/boot/grub/themes/theme_name/theme.txt" ```
+
+@wde11
+https://github.com/wde11
