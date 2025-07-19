@@ -31,6 +31,9 @@ terminal-border: "0"
     item_color = "#FFFFFF"
     item_spacing = 20
     item_height = 22
+    icon_width = 20
+    icon_height = 20
+    item_icon_space = 10
     item_padding = 0
     item_icon_space = 35
     selected_item_font = "Asus Rog 16.pf2"
