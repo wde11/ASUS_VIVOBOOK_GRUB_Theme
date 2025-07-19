@@ -17,12 +17,12 @@ Hello this is a guide in installing Grub Theme onto your Grub bootloader.
 
 1.  Clone this repository to your local machine:
     ```sh
-    git clone https://github.com/wde11/ASUS_VIVOBOOK_GRUB_Theme.git
+    git clone https://github.com/wde11/asus-vivo-theme.git
     ```
 
 2.  Navigate into the cloned directory:
     ```sh
-    cd ASUS_VIVOBOOK_GRUB_Theme
+    cd asus-vivo-theme
     ```
 
 3.  Make the installation script executable:
@@ -42,9 +42,9 @@ Hello this is a guide in installing Grub Theme onto your Grub bootloader.
 > [!WARNING]
 > Make sure to not delete the file before uninstall the grub theme.
 
-1.  Navigate into the cloned directory:
+1.  Revert back to terminal:
     ```sh
-    cd ASUS_VIVOBOOK_GRUB_Theme
+    cd
     ```
 
 2.  Make the installation script executable:

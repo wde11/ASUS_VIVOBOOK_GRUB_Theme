@@ -7,7 +7,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Configuration
-THEME_NAME="ASUS_VIVOBOOK_GRUB_Theme"
+THEME_NAME="asus-vivo-theme"
 THEME_DIR="/boot/grub/themes/$THEME_NAME"
 GRUB_CONFIG_FILE="/etc/default/grub"
 
