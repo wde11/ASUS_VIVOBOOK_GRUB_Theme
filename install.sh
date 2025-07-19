@@ -21,7 +21,9 @@ mkdir -p "$THEME_DIR"
 
 # Copy theme files
 echo "Copying theme files..."
-cp -r "$SCRIPT_DIR/"* "$THEME_DIR/"
+# Using 'cp -a' is the most reliable way to copy all files and directories.
+# The '/.' ensures the *contents* of the directory are copied.
+cp -a "$SCRIPT_DIR/." "$THEME_DIR/"
 
 # Convert .ttf font to .pf2 for GRUB
 echo "Converting font..."
