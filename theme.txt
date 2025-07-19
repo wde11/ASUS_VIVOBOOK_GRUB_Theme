@@ -7,7 +7,7 @@ title-font: "Asus Rog 20.pf2"
 message-font: "Asus Rog 12.pf2"
 message-color: "#7F8183"
 # message-bg-color property removed for compatibility
-desktop-image: "background.png"
+desktop-image: "asus_grub_bg.png"
 desktop-color: "#000000"
 terminal-font: "Asus Rog 12.pf2"
 terminal-box: "terminal_box_*.png"
