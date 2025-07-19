@@ -1,12 +1,12 @@
 # GRUB2 gfxmenu Linux theme
-# Designed for 1920x1080 displays
+# Responsive Version for All Displays
 
 # Global Property
 title-text: ""
 title-font: "Asus Rog 20.pf2"
 message-font: "Asus Rog 12.pf2"
 message-color: "#7F8183"
-message-bg-color: ""
+message-bg-color: "transparent"
 desktop-image: "background.png"
 desktop-color: "#000000"
 terminal-font: "Asus Rog 12.pf2"
@@ -28,30 +28,33 @@ selected_item_font: "Asus Rog 16.pf2"
 selected_item_color: "#000000"
 selected_item_pixmap_style: "select_*.png"
 
+# Centered boot menu component
 + boot_menu {
-    left = 34%
-    top = 34%
+    left = 34%      # Centered: (100% - 32% width) / 2
+    top = 35%       # Centered: (100% - 30% height) / 2
     width = 32%
-    height = 250
+    height = 30%
 }
 
+# Label near the bottom of the screen
 + label {
     top = 90%
-    left = 34%
+    left = 34%      # Aligned with the menu box
     width = 32%
-    height = 20
+    height = 5%
     align = "center"
     color = "#FFFFFF"
     font = "Asus Rog 12.pf2"
     text = "github.com/wde11"
 }
 
+# Progress bar positioned below the menu
 + progress_bar {
     id = "__timeout__"
-    left = 34%
-    top = 65%
+    left = 34%      # Aligned with the menu box
+    top = 68%       # Positioned below the boot menu
     width = 32%
-    height = 20
+    height = 3%
     show_text = true
     font = "Asus Rog 12.pf2"
     text_color = "#FFFFFF"
