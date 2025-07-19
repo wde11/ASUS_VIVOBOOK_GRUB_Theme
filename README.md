@@ -2,7 +2,9 @@
 
 Hello this is a guide in installing Grub Theme onto your Grub bootloader.
 
-![Grub preview](preview.png)
+<p align="center">
+  <img src="preview.png" alt="Alt text for image" width="500">
+</p>
 
 ### Prerequisites
 
