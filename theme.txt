@@ -22,8 +22,8 @@ terminal-border: "0"
 + boot_menu {
     # Layout Properties
     left = 34%      # Centered: (100% - 32% width) / 2
-    top = 55%       # Centered: (100% - 30% height) / 2
-    width = 32%
+    top = 30%       # Centered: (100% - 30% height) / 2
+    width = 50%
     height = 30%
 
     # Item Properties (MOVED INSIDE)
