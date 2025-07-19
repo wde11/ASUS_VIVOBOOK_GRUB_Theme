@@ -2,7 +2,10 @@
 
 Hello this is a guide in installing Grub Theme onto your Grub bootloader.
 
-(Be warned this repository is still work in progress, and so far there's nothing inside the theme.txt file)
+> [!IMPORTANT]
+> This theme, might be a work in progress. I may plan to update the design in the future.
+
+![Grub preview](preview.png)
 
 ### Prerequisites
 
