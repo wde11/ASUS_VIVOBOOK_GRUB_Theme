@@ -22,7 +22,7 @@ terminal-border: "0"
 + boot_menu {
     # Layout Properties
     left = 34%      # Centered: (100% - 32% width) / 2
-    top = 35%       # Centered: (100% - 30% height) / 2
+    top = 55%       # Centered: (100% - 30% height) / 2
     width = 32%
     height = 30%
 
@@ -31,11 +31,8 @@ terminal-border: "0"
     item_color = "#FFFFFF"
     item_spacing = 20
     item_height = 22
-    icon_width = 20
-    icon_height = 20
-    item_icon_space = 10
     item_padding = 0
-    item_icon_space = 35
+    item_icon_space = 20
     selected_item_font = "Asus Rog 16.pf2"
     selected_item_color = "	#2dba4e"
     selected_item_pixmap_style = "select_*.png"
