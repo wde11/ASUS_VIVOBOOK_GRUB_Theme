@@ -6,36 +6,62 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-# --- Automatically determine script's location ---
-# This makes the script runnable from anywhere.
+# Automatically determine script's location
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 THEME_NAME=$(basename "$SCRIPT_DIR")
-# ------------------------------------------------
+GRUB_CONFIG_FILE="/etc/default/grub"
 
-# The destination path for GRUB themes.
+# Destination path for GRUB themes
 DEST_PARENT_DIR="/boot/grub/themes"
 THEME_DIR="$DEST_PARENT_DIR/$THEME_NAME"
 
-# Create theme directory if it doesn't exist
+# Create theme directory
 echo "Creating theme directory: $THEME_DIR"
 mkdir -p "$THEME_DIR"
 
 # Copy theme files
-echo "Copying theme files from $SCRIPT_DIR..."
-# Using '/.' ensures all contents, including hidden files, are copied.
-cp -r "$SCRIPT_DIR/." "$THEME_DIR/"
+echo "Copying theme files..."
+cp -r "$SCRIPT_DIR/"* "$THEME_DIR/"
 
-# Set GRUB_THEME in /etc/default/grub
-echo "Configuring GRUB..."
-if grep -q "^GRUB_THEME=" /etc/default/grub; then
-    # If the line exists, replace it
-    sed -i 's|^GRUB_THEME=.*|GRUB_THEME="'"$THEME_DIR/theme.txt"'"|' /etc/default/grub
+# Convert .ttf font to .pf2 for GRUB
+echo "Converting font..."
+if [ -f "$SCRIPT_DIR/Asus Rog.ttf" ]; then
+    grub-mkfont -v -s 12 -o "$THEME_DIR/Asus Rog 12.pf2" "$SCRIPT_DIR/Asus Rog.ttf"
+    grub-mkfont -v -s 16 -o "$THEME_DIR/Asus Rog 16.pf2" "$SCRIPT_DIR/Asus Rog.ttf"
+    grub-mkfont -v -s 20 -o "$THEME_DIR/Asus Rog 20.pf2" "$SCRIPT_DIR/Asus Rog.ttf"
 else
-    # If the line doesn't exist, add it
-    echo 'GRUB_THEME="'"$THEME_DIR/theme.txt"'"' >> /etc/default/grub
+    echo "Warning: Font file 'Asus Rog.ttf' not found. Skipping font conversion."
 fi
 
-# Update GRUB configuration
+# --- Configure GRUB settings ---
+echo "Configuring GRUB settings in $GRUB_CONFIG_FILE..."
+
+# Set GRUB_THEME
+THEME_CONFIG_LINE="GRUB_THEME=\"$THEME_DIR/theme.txt\""
+if grep -q "^GRUB_THEME=" "$GRUB_CONFIG_FILE"; then
+    sed -i "s|^GRUB_THEME=.*|$THEME_CONFIG_LINE|" "$GRUB_CONFIG_FILE"
+else
+    echo "$THEME_CONFIG_LINE" >> "$GRUB_CONFIG_FILE"
+fi
+
+# Set GRUB_GFXMODE
+GFX_MODE_LINE="GRUB_GFXMODE=1920x1080,auto"
+if grep -q "^GRUB_GFXMODE=" "$GRUB_CONFIG_FILE"; then
+    sed -i "s|^GRUB_GFXMODE=.*|$GFX_MODE_LINE|" "$GRUB_CONFIG_FILE"
+else
+    echo "$GFX_MODE_LINE" >> "$GRUB_CONFIG_FILE"
+fi
+
+# Set GRUB_GFXPAYLOAD_LINUX
+GFX_PAYLOAD_LINE="GRUB_GFXPAYLOAD_LINUX=keep"
+if grep -q "^GRUB_GFXPAYLOAD_LINUX=" "$GRUB_CONFIG_FILE"; then
+    sed -i "s|^GRUB_GFXPAYLOAD_LINUX=.*|$GFX_PAYLOAD_LINE|" "$GRUB_CONFIG_FILE"
+else
+    echo "$GFX_PAYLOAD_LINE" >> "$GRUB_CONFIG_FILE"
+fi
+# --- End GRUB config ---
+
+# Update GRUB
 echo "Updating GRUB..."
 if command -v update-grub &> /dev/null; then
     update-grub
