@@ -33,7 +33,12 @@ Hello this is a guide in installing Grub Theme onto your Grub bootloader.
     sudo ./install.sh
     ```
 
-    ### Uninstall
+5. ``` You've successfully installed your Grub theme onto your bootloader! Reboot your system to see the changes. ```
+
+### Uninstall
+
+> [!WARNING]
+> Make sure to not delete the file before uninstall the grub theme.
 
 1.  Navigate into the cloned directory:
     ```sh
@@ -49,10 +54,8 @@ Hello this is a guide in installing Grub Theme onto your Grub bootloader.
     ```sh
     sudo ./uninstallinstall.sh
     ```
-> [!WARNING]
-> Make sure to not delete the file before uninstall the grub theme.
 
-You've successfully installed your Grub theme onto your bootloader! Reboot your system to see the changes.
+5. ``` You've successfully uninstalled your Grub theme from your bootloader! Reboot your system to see the changes. ```
 
 If you want to configure the file, open your terminal ```sh sudo nano /etc/default/grub ``` and locate ``` #GRUB_THEME="/boot/grub/themes/theme_name/theme.txt" ```
 
