@@ -34,7 +34,7 @@ terminal-border: "0"
     item_padding = 0
     item_icon_space = 20
     selected_item_font = "Asus Rog 16.pf2"
-    selected_item_color = "	#2dba4e"
+    selected_item_color = "	#0f0d29ff"
     selected_item_pixmap_style = "select_*.png"
 }
 
