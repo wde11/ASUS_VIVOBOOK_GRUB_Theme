@@ -40,7 +40,7 @@ Hello this is a guide in installing Grub Theme onto your Grub bootloader.
 ### Uninstall
 
 > [!WARNING]
-> Make sure to not delete the file before uninstall the grub theme.
+> Don't delete the cloned file when uninstalling the grub theme.
 
 1.  Revert back to terminal:
     ```sh
